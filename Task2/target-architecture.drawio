@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram id="target-c4-context" name="C4 Level 1 — TO-BE">
-    <mxGraphModel dx="3251" dy="896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1950" pageHeight="1200" math="0" shadow="0">
+    <mxGraphModel dx="3056" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1950" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -96,6 +96,17 @@
         <mxCell id="title" value="Целевая контекстная диаграмма «Здоровье+» — C4 Level 1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#1f2937;" parent="health-boundary" vertex="1">
           <mxGeometry x="310" y="50" width="1350" height="40" as="geometry" />
         </mxCell>
+        <mxCell id="workforce-iam" value="&lt;b&gt;Корпоративный IAM / SSO&lt;/b&gt;&lt;br&gt;Аутентификация сотрудников, MFA и роли" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="100" y="617" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="e-workforce-iam-lis" value="REL21 Identity + RBAC claims [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="workforce-iam" target="lis" edge="1">
+          <mxGeometry x="-0.5811" y="10" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="670" />
+            </Array>
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="patient" value="&lt;b&gt;Пациент&lt;/b&gt;&lt;br&gt;Запись, оплата, анализы, ДМС" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="-80" y="435" width="190" height="90" as="geometry" />
         </mxCell>
@@ -111,7 +122,7 @@
         <mxCell id="web-portal" value="&lt;b&gt;Веб-портал&lt;/b&gt;&lt;br&gt;Канал врачей и администраторов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="348" y="180" width="220" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="iam" value="&lt;b&gt;IAM&lt;/b&gt;&lt;br&gt;Идентификация, OAuth 2.1 / OIDC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
+        <mxCell id="iam" value="&lt;b&gt;CIAM пациентов&lt;/b&gt;&lt;br&gt;Идентификация, OAuth 2.1 / OIDC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="827" y="435" width="210" height="90" as="geometry" />
         </mxCell>
         <mxCell id="gateway" value="&lt;b&gt;API Gateway / WAF&lt;/b&gt;&lt;br&gt;Безопасный вход, маршрутизация и политики API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
@@ -150,9 +161,6 @@
           <mxGeometry x="-0.0961" y="19" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="e-lab-lis" value="UI/API" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#334155;endArrow=block;endFill=1;fontSize=12;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="lab-technician" target="lis" edge="1">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e-mobile-iam" value="REL01 OIDC [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="mobile" target="iam" edge="1">
           <mxGeometry x="0.04" y="20" relative="1" as="geometry">
@@ -282,7 +290,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="8VxPfA1XYqpvdzYbjMXH-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="message-providers" target="observability">
+        <mxCell id="8VxPfA1XYqpvdzYbjMXH-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="message-providers" target="observability" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2408" y="1350" />
@@ -293,6 +301,14 @@
             <mxPoint x="2408" y="1308" as="sourcePoint" />
             <mxPoint x="110" y="500" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="e-lab-workforce-iam" value="REL20 SSO [OIDC/SAML, sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="lab-technician" target="workforce-iam" edge="1">
+          <mxGeometry x="0.1361" y="9" relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-workforce-iam-observability" value="REL19 Аудит доступа [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#94a3b8;dashed=1;dashPattern=4 4;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;" parent="1" source="workforce-iam" target="observability" edge="1">
+          <mxGeometry y="-15" relative="1" as="geometry" />
         </mxCell>
         <mxCell id="observability" value="&lt;b&gt;Платформа наблюдаемости&lt;/b&gt;&lt;br&gt;Метрики, логи, трассировки и алерты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="827" y="1305" width="240" height="105" as="geometry" />
