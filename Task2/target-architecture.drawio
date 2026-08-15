@@ -97,35 +97,65 @@
           <mxGeometry x="310" y="50" width="1350" height="40" as="geometry" />
         </mxCell>
         <mxCell id="workforce-iam" value="&lt;b&gt;Корпоративный IAM / SSO&lt;/b&gt;&lt;br&gt;Аутентификация сотрудников, MFA и роли" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
-          <mxGeometry x="100" y="617" width="230" height="105" as="geometry" />
+          <mxGeometry x="240" y="310" width="230" height="105" as="geometry" />
         </mxCell>
-        <mxCell id="e-workforce-iam-lis" value="REL21 Identity + RBAC claims [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="workforce-iam" target="lis" edge="1">
-          <mxGeometry x="-0.5811" y="10" relative="1" as="geometry">
+        <mxCell id="internal-gateway" value="&lt;b&gt;Internal Gateway / Access Proxy&lt;/b&gt;&lt;br&gt;SSO, RBAC и маршрутизация внутренних запросов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="640" y="95" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="e-internal-gateway-workforce-iam" value="REL22 SSO/RBAC [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="internal-gateway" target="workforce-iam" edge="1">
+          <mxGeometry x="0.3898" y="-20" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="480" y="670" />
+              <mxPoint x="750" y="370" />
             </Array>
-            <mxPoint y="1" as="offset" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-internal-gateway-schedule" value="REL23 REST [sync]&lt;br&gt;Слоты и записи" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="internal-gateway" target="schedule" edge="1">
+          <mxGeometry y="-18" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="300" />
+              <mxPoint x="1243" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-internal-gateway-lis" value="REL25 HTTPS/REST [sync]&lt;br&gt;Лабораторные результаты" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="internal-gateway" target="lis" edge="1">
+          <mxGeometry x="-0.4765" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="950" y="150" />
+              <mxPoint x="950" y="470" />
+              <mxPoint x="1510" y="470" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mobile" value="&lt;b&gt;Мобильное приложение&lt;/b&gt;&lt;br&gt;Канал самообслуживания пациента" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="60" y="500" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="iam" value="&lt;b&gt;CIAM пациентов&lt;/b&gt;&lt;br&gt;Идентификация, OAuth 2.1 / OIDC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="260" y="700" width="210" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e-mobile-iam" value="REL01 OIDC [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="mobile" target="iam" edge="1">
+          <mxGeometry x="-0.2593" y="10" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="170" y="640" />
+              <mxPoint x="375" y="640" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="patient" value="&lt;b&gt;Пациент&lt;/b&gt;&lt;br&gt;Запись, оплата, анализы, ДМС" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="-80" y="435" width="190" height="90" as="geometry" />
+          <mxGeometry x="-80" y="584.5" width="190" height="90" as="geometry" />
         </mxCell>
         <mxCell id="doctor" value="&lt;b&gt;Врач / администратор&lt;/b&gt;&lt;br&gt;Расписание и данные пациентов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="-80" y="185" width="190" height="90" as="geometry" />
         </mxCell>
         <mxCell id="lab-technician" value="&lt;b&gt;Лаборант&lt;/b&gt;&lt;br&gt;Контроль результатов в LIS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="-80" y="705" width="190" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="mobile" value="&lt;b&gt;Мобильное приложение&lt;/b&gt;&lt;br&gt;Канал самообслуживания пациента" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="348" y="430" width="220" height="100" as="geometry" />
+          <mxGeometry x="-80" y="310" width="190" height="90" as="geometry" />
         </mxCell>
         <mxCell id="web-portal" value="&lt;b&gt;Веб-портал&lt;/b&gt;&lt;br&gt;Канал врачей и администраторов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="348" y="180" width="220" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="iam" value="&lt;b&gt;CIAM пациентов&lt;/b&gt;&lt;br&gt;Идентификация, OAuth 2.1 / OIDC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="827" y="435" width="210" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="gateway" value="&lt;b&gt;API Gateway / WAF&lt;/b&gt;&lt;br&gt;Безопасный вход, маршрутизация и политики API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
+        <mxCell id="gateway" value="&lt;b&gt;External API Gateway / WAF&lt;/b&gt;&lt;br&gt;Публичный вход мобильного приложения и политики API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="818" y="575" width="230" height="105" as="geometry" />
         </mxCell>
         <mxCell id="crm" value="&lt;b&gt;CRM&lt;/b&gt;&lt;br&gt;Карточки пациентов и результаты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
@@ -162,43 +192,26 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-mobile-iam" value="REL01 OIDC [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="mobile" target="iam" edge="1">
-          <mxGeometry x="0.04" y="20" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="e-mobile-gateway" value="REL02 REST [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="mobile" target="gateway" edge="1">
           <mxGeometry x="-0.409" y="-10" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="758" y="500" />
-              <mxPoint x="758" y="628" />
+              <mxPoint x="600" y="628" />
+              <mxPoint x="600" y="628" />
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="e-gateway-iam" value="REL03 JWT [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="gateway" target="iam" edge="1">
-          <mxGeometry x="-0.0188" y="-15" relative="1" as="geometry">
-            <mxPoint x="15" y="15" as="offset" />
+          <mxGeometry x="-0.2934" y="-10" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="933" y="720" />
+              <mxPoint x="615" y="720" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="e-gateway-platform" value="REL04 REST [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="gateway" target="patient-platform" edge="1">
           <mxGeometry y="-20" relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-web-schedule" value="Записи [REST, sync — transition]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="web-portal" target="schedule" edge="1">
-          <mxGeometry x="0.6986" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1448" y="230" />
-            </Array>
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e-web-crm" value="Пациенты [REST, sync — transition]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="web-portal" target="crm" edge="1">
-          <mxGeometry x="0.7684" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1738" y="230" />
-            </Array>
-            <mxPoint as="offset" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="e-integration-crm" value="REL11 REST [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="integration-platform" target="crm" edge="1">
           <mxGeometry x="0.9194" relative="1" as="geometry">
@@ -252,6 +265,7 @@
             <Array as="points">
               <mxPoint x="170" y="1358" />
               <mxPoint x="170" y="500" />
+              <mxPoint x="50" y="500" />
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
@@ -302,13 +316,45 @@
             <mxPoint x="110" y="500" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-lab-workforce-iam" value="REL20 SSO [OIDC/SAML, sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="lab-technician" target="workforce-iam" edge="1">
-          <mxGeometry x="0.1361" y="9" relative="1" as="geometry">
-            <mxPoint y="1" as="offset" />
+        <mxCell id="e-web-internal-gateway" value="REL20 Staff API [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="web-portal" target="internal-gateway" edge="1">
+          <mxGeometry y="-18" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-lab-internal-gateway" value="REL21 LIS access [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="lab-technician" target="internal-gateway" edge="1">
+          <mxGeometry x="0.3933" y="20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="350" />
+              <mxPoint x="810" y="230" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-internal-gateway-crm" value="REL24 REST [sync]&lt;br&gt;Карточки пациентов" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="internal-gateway" target="crm" edge="1">
+          <mxGeometry x="0.35" y="18" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1320" y="330" />
+              <mxPoint x="1778" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-internal-gateway-observability" value="REL19 Аудит и телеметрия [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#94a3b8;dashed=1;dashPattern=4 4;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="internal-gateway" target="observability" edge="1">
+          <mxGeometry x="-0.8323" y="10" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1070" y="750" />
+              <mxPoint x="947" y="750" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="e-workforce-iam-observability" value="REL19 Аудит доступа [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#94a3b8;dashed=1;dashPattern=4 4;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;" parent="1" source="workforce-iam" target="observability" edge="1">
-          <mxGeometry y="-15" relative="1" as="geometry" />
+          <mxGeometry x="-0.6644" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="595" y="530" />
+              <mxPoint x="745" y="530" />
+              <mxPoint x="745" y="830" />
+              <mxPoint x="947" y="830" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="observability" value="&lt;b&gt;Платформа наблюдаемости&lt;/b&gt;&lt;br&gt;Метрики, логи, трассировки и алерты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="827" y="1305" width="240" height="105" as="geometry" />
