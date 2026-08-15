@@ -143,6 +143,12 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="web-portal" value="&lt;b&gt;Веб-портал&lt;/b&gt;&lt;br&gt;Канал врачей и администраторов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="50" y="100" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e-web-internal-gateway" value="REL20 Staff API [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="web-portal" target="internal-gateway" edge="1">
+          <mxGeometry y="-18" relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="patient" value="&lt;b&gt;Пациент&lt;/b&gt;&lt;br&gt;Запись, оплата, анализы, ДМС" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="-80" y="584.5" width="190" height="90" as="geometry" />
         </mxCell>
@@ -151,9 +157,6 @@
         </mxCell>
         <mxCell id="lab-technician" value="&lt;b&gt;Лаборант&lt;/b&gt;&lt;br&gt;Контроль результатов в LIS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="-80" y="310" width="190" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="web-portal" value="&lt;b&gt;Веб-портал&lt;/b&gt;&lt;br&gt;Канал врачей и администраторов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="348" y="180" width="220" height="100" as="geometry" />
         </mxCell>
         <mxCell id="gateway" value="&lt;b&gt;External API Gateway / WAF&lt;/b&gt;&lt;br&gt;Публичный вход мобильного приложения и политики API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="818" y="575" width="230" height="105" as="geometry" />
@@ -315,9 +318,6 @@
             <mxPoint x="2408" y="1308" as="sourcePoint" />
             <mxPoint x="110" y="500" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="e-web-internal-gateway" value="REL20 Staff API [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="web-portal" target="internal-gateway" edge="1">
-          <mxGeometry y="-18" relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e-lab-internal-gateway" value="REL21 LIS access [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="lab-technician" target="internal-gateway" edge="1">
           <mxGeometry x="0.3933" y="20" relative="1" as="geometry">
