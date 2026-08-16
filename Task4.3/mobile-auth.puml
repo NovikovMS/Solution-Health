@@ -1,0 +1,64 @@
+@startuml
+title Аутентификация пациента\nOAuth 2.1 / OIDC Authorization Code + PKCE
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam sequence {
+  ArrowColor #334155
+  LifeLineBorderColor #94A3B8
+  LifeLineBackgroundColor white
+  ParticipantBorderColor #0B4884
+  ParticipantBackgroundColor #1168BD
+  ParticipantFontColor white
+  ParticipantFontStyle bold
+  GroupBorderColor #64748B
+  GroupBackgroundColor #F8FAFC
+}
+
+autonumber
+
+actor "Пациент" as Patient
+participant "Мобильное\nприложение" as Mobile
+participant "Системный\nбраузер" as Browser
+participant "CIAM пациентов" as CIAM
+participant "External API\nGateway / WAF" as Gateway
+participant "Mobile API / BFF" as BFF
+
+Patient -> Mobile: Войти
+Mobile -> Mobile: создать state, nonce,\ncode_verifier и S256 challenge
+Mobile -> Browser: открыть /authorize\nchallenge, state, nonce, redirect_uri
+Browser -> CIAM: OIDC Authorization Request
+CIAM -> Patient: аутентификация + risk-based MFA
+Patient --> CIAM: учётные данные / второй фактор
+CIAM --> Browser: redirect с одноразовым code и state
+Browser --> Mobile: universal/app link
+Mobile -> Mobile: проверить state
+
+Mobile -> CIAM: POST /token\ncode + code_verifier
+CIAM -> CIAM: проверить code, redirect_uri,\nPKCE challenge и nonce
+CIAM --> Mobile: JWT access token (10 мин)\n+ rotating refresh token
+note over Mobile
+  Access token — в памяти.
+  Refresh token — в Keychain/Keystore.
+  Токены не передаются в URL и логи.
+end note
+
+Mobile -> Gateway: GET /api/v1/...\nAuthorization: Bearer JWT
+group Проверка на External Gateway
+  Gateway -> CIAM: получить JWKS при неизвестном kid\nили по расписанию
+  CIAM --> Gateway: подписанный JWKS
+  Gateway -> Gateway: проверить signature, iss, aud,\nexp, nbf, scope + Rate Limit/WAF
+end
+Gateway -> BFF: запрос + доверенные claims (sub, scopes)\nпо mTLS
+BFF -> BFF: object-level authorization по sub
+BFF --> Gateway: бизнес-ответ
+Gateway --> Mobile: HTTPS response
+
+opt Обновление с ротацией
+  Mobile -> CIAM: refresh token
+  CIAM -> CIAM: проверить reuse и ротировать token family
+  CIAM --> Mobile: новый access token + новый refresh token
+end
+
+@enduml
