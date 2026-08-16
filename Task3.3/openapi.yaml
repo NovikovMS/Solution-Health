@@ -1,0 +1,281 @@
+openapi: 3.0.3
+info:
+  title: Health+ Mobile Appointments API
+  version: 1.0.0
+  description: API получения пациентом собственных записей к врачу.
+servers:
+  - url: https://api.healthplus.example/api/v1
+    description: Production
+tags:
+  - name: Appointments
+    description: Записи текущего аутентифицированного пациента
+
+paths:
+  /appointments:
+    get:
+      tags:
+        - Appointments
+      summary: Получить предстоящие записи к врачу
+      description: >-
+        Возвращает записи только текущего пациента, определённого по access token.
+        Результат отсортирован по startsAt по возрастанию, затем по id.
+      operationId: listPatientAppointments
+      parameters:
+        - name: status
+          in: query
+          description: Фильтр по состоянию записи.
+          required: false
+          schema:
+            type: string
+            enum:
+              - upcoming
+            default: upcoming
+          example: upcoming
+        - name: limit
+          in: query
+          description: Максимальное число записей в ответе.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 20
+          example: 20
+        - name: offset
+          in: query
+          description: Число записей, пропускаемых от начала отсортированного списка.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+          example: 0
+      responses:
+        "200":
+          description: Список предстоящих записей получен.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentListResponse"
+              examples:
+                appointmentsFound:
+                  summary: Две предстоящие записи
+                  value:
+                    items:
+                      - id: apt_01JX6E4S2K8N2P4M5Q7R9T1V3W
+                        status: confirmed
+                        startsAt: "2026-08-20T09:30:00+03:00"
+                        endsAt: "2026-08-20T10:00:00+03:00"
+                        doctor:
+                          id: doc_1042
+                          fullName: Иванова Мария Сергеевна
+                          specialty: Терапевт
+                        clinic:
+                          id: clinic_01
+                          name: Здоровье+ на Центральной
+                          address: г. Москва, ул. Центральная, д. 10
+                      - id: apt_01JX6F8A7D3H5K9M2N4P6Q8R0S
+                        status: pending_payment
+                        startsAt: "2026-08-25T14:00:00+03:00"
+                        endsAt: "2026-08-25T14:30:00+03:00"
+                        doctor:
+                          id: doc_2088
+                          fullName: Петров Алексей Игоревич
+                          specialty: Кардиолог
+                        clinic:
+                          id: clinic_02
+                          name: Здоровье+ на Парковой
+                          address: г. Москва, ул. Парковая, д. 7
+                    pagination:
+                      limit: 20
+                      offset: 0
+                      count: 2
+                      total: 2
+                emptyList:
+                  summary: Предстоящих записей нет
+                  value:
+                    items: []
+                    pagination:
+                      limit: 20
+                      offset: 0
+                      count: 0
+                      total: 0
+        "401":
+          description: Access token отсутствует, недействителен или истёк.
+          headers:
+            WWW-Authenticate:
+              description: Параметры Bearer-аутентификации.
+              schema:
+                type: string
+              example: Bearer realm="healthplus", error="invalid_token"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                code: UNAUTHORIZED
+                message: Access token is missing, invalid, or expired.
+                requestId: req_01JX6G1B9C3D5E7F9H2K4M6N8P
+        "500":
+          description: Непредвиденная внутренняя ошибка.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                code: INTERNAL_ERROR
+                message: An unexpected error occurred.
+                requestId: req_01JX6G5Q2W4E6R8T1Y3U5I7O9P
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.1 access token пациента, выданный CIAM.
+
+  schemas:
+    AppointmentListResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - pagination
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Appointment"
+        pagination:
+          $ref: "#/components/schemas/OffsetPagination"
+
+    Appointment:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - status
+        - startsAt
+        - endsAt
+        - doctor
+        - clinic
+      properties:
+        id:
+          type: string
+          description: Стабильный публичный идентификатор записи.
+          example: apt_01JX6E4S2K8N2P4M5Q7R9T1V3W
+        status:
+          type: string
+          description: Текущее состояние записи.
+          enum:
+            - pending_payment
+            - confirmed
+            - rescheduling
+          example: confirmed
+        startsAt:
+          type: string
+          format: date-time
+          description: Начало приёма в ISO 8601 с часовым поясом клиники.
+          example: "2026-08-20T09:30:00+03:00"
+        endsAt:
+          type: string
+          format: date-time
+          description: Окончание приёма в ISO 8601 с часовым поясом клиники.
+          example: "2026-08-20T10:00:00+03:00"
+        doctor:
+          $ref: "#/components/schemas/DoctorSummary"
+        clinic:
+          $ref: "#/components/schemas/ClinicSummary"
+
+    DoctorSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - fullName
+        - specialty
+      properties:
+        id:
+          type: string
+          example: doc_1042
+        fullName:
+          type: string
+          example: Иванова Мария Сергеевна
+        specialty:
+          type: string
+          example: Терапевт
+
+    ClinicSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - address
+      properties:
+        id:
+          type: string
+          example: clinic_01
+        name:
+          type: string
+          example: Здоровье+ на Центральной
+        address:
+          type: string
+          example: г. Москва, ул. Центральная, д. 10
+
+    OffsetPagination:
+      type: object
+      additionalProperties: false
+      required:
+        - limit
+        - offset
+        - count
+        - total
+      properties:
+        limit:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+          example: 20
+        offset:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 0
+        count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Число элементов в текущем ответе.
+          example: 2
+        total:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Общее число элементов, соответствующих фильтру.
+          example: 2
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+        - requestId
+      properties:
+        code:
+          type: string
+          example: INTERNAL_ERROR
+        message:
+          type: string
+          example: An unexpected error occurred.
+        requestId:
+          type: string
+          description: Идентификатор для поиска запроса в логах и трассировках.
+          example: req_01JX6G5Q2W4E6R8T1Y3U5I7O9P
