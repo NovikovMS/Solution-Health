@@ -1,0 +1,80 @@
+@startuml
+title Запись с оплатой и резервированием анализов\nУспешная оркестрируемая SAGA
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam sequence {
+  ArrowColor #334155
+  LifeLineBorderColor #94A3B8
+  LifeLineBackgroundColor white
+  ParticipantBorderColor #0B4884
+  ParticipantBackgroundColor #1168BD
+  ParticipantFontColor white
+  ParticipantFontStyle bold
+  BoxBorderColor #CBD5E1
+  BoxBackgroundColor #F8FAFC
+  GroupBorderColor #64748B
+  GroupBackgroundColor #F8FAFC
+}
+
+autonumber
+
+actor "Мобильное\nприложение" as Mobile
+participant "External API Gateway\n/ BFF" as BFF
+queue "Событийная\nплатформа" as Bus
+participant "Интеграционная платформа\nSaga Orchestrator + adapters" as Saga
+participant "1С: Полисы" as Policy
+participant "Расписание" as Schedule
+participant "Платёжный шлюз" as Payment
+participant "LIS" as LIS
+participant "Read-модель /\nуведомления" as Projection
+
+Mobile -> BFF: POST /booking-sagas\nIdempotency-Key, access token
+activate BFF
+BFF -> BFF: проверить JWT и атомарно\nзарегистрировать Idempotency-Key
+BFF -> Bus: StartBookingSaga(operationId)
+BFF --> Mobile: 202 Accepted, operationId
+deactivate BFF
+
+Bus -> Saga: доставить StartBookingSaga
+activate Saga
+note over Saga
+  Состояние SAGA и исходящие команды
+  фиксируются через transactional outbox.
+  Все изменяющие вызовы получают
+  производный идемпотентный ключ.
+end note
+
+Saga -> Policy: verifyPolicy(operationId:policy)
+Policy --> Saga: policy VALID
+
+Saga -> Schedule: reserveDoctorSlot\n(operationId:appointment)
+Schedule --> Saga: appointmentReservationId
+
+Saga -> Payment: createPaymentIntent\n(operationId:payment)
+Payment --> Saga: paymentId, paymentUrl
+Saga -> Bus: PaymentActionRequired(operationId, paymentUrl)
+Bus -> Projection: обновить read-модель операции
+
+Mobile -> BFF: GET /operations/{operationId}
+BFF -> Projection: прочитать состояние
+Projection --> BFF: PENDING_PAYMENT, paymentUrl
+BFF --> Mobile: PENDING_PAYMENT, paymentUrl
+
+Mobile -> Payment: подтвердить оплату
+Payment -> Saga: подписанный webhook CAPTURED\n(inbox + дедупликация)
+
+Saga -> LIS: reserveLabSlot(operationId:lab)
+LIS --> Saga: labReservationId
+
+Saga -> Bus: BookingSagaCompleted(operationId)
+deactivate Saga
+Bus -> Projection: обновить read-модель и отправить push
+
+Mobile -> BFF: GET /operations/{operationId}
+BFF -> Projection: прочитать состояние
+Projection --> BFF: SUCCEEDED, booking details
+BFF --> Mobile: SUCCEEDED, booking details
+
+@enduml
