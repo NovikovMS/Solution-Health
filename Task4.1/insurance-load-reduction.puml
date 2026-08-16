@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Context>
+
+title C4 Level 1 — снижение нагрузки на 1С: Полисы
+
+LAYOUT_LEFT_RIGHT()
+
+Person(patient, "Пациент", "Проверяет полис и оформляет запись")
+
+System(mobile, "Мобильное приложение", "Показывает состояние полиса и статус отложенной проверки")
+System_Boundary(healthplus, "Здоровье+") {
+  System(gateway, "External API Gateway / WAF", "Проверяет access token, маршрутизирует и ограничивает публичный трафик")
+  System(digital, "Цифровая платформа пациентов", "Mobile API/BFF и локальная проекция полисов с sourceUpdatedAt и verificationStatus")
+  System(events, "Событийная платформа", "Буферизует команды сверки, объединяет пики и доставляет события")
+  System(integration, "Интеграционная платформа", "Saga/legacy-адаптеры, дедупликация, rate limiter 40 RPS, bulkhead и Circuit Breaker")
+}
+System_Ext(policy1c, "1С: Полисы", "Система-источник полисов ДМС; HTTP-шлюз, предел около 50 RPS")
+
+Rel(patient, mobile, "Просматривает полис и создаёт запись")
+Rel(mobile, gateway, "Запрашивает состояние полиса", "HTTPS/REST + Bearer JWT")
+Rel(gateway, digital, "Передаёт авторизованный запрос", "HTTPS/REST")
+Rel(digital, mobile, "Возвращает данные проекции или PENDING_VERIFICATION", "HTTPS/REST")
+
+Rel(digital, events, "Публикует команду сверки при cache miss/stale/изменении", "Async message")
+Rel(events, integration, "Доставляет дедуплицированную команду", "Competing consumers")
+Rel(integration, policy1c, "Сверяет полис в пределах 40 RPS", "HTTP + timeout/retry/CB")
+Rel(policy1c, integration, "Возвращает фактическое состояние", "HTTP")
+Rel(integration, events, "Публикует нормализованный результат", "Async event")
+Rel(events, digital, "Обновляет локальную проекцию идемпотентно", "Async event")
+
+SHOW_LEGEND()
+@enduml
