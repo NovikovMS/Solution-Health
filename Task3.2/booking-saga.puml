@@ -27,6 +27,7 @@ participant "Интеграционная платформа\nSaga Orchestrator 
 participant "1С: Полисы" as Policy
 participant "Расписание" as Schedule
 participant "Платёжный шлюз" as Payment
+participant "Payment Webhook\nInbox" as PaymentInbox
 participant "LIS" as LIS
 participant "Read-модель /\nуведомления" as Projection
 
@@ -51,6 +52,12 @@ Policy --> Saga: policy VALID
 
 Saga -> Schedule: reserveDoctorSlot\n(operationId:appointment)
 Schedule --> Saga: appointmentReservationId
+note over Saga, Schedule
+  Hold врача: TTL 15 минут.
+  Saga timer закрывает abandoned payment;
+  неизвестный результат сверяется через
+  GET payment status/reconciliation.
+end note
 
 Saga -> Payment: createPaymentIntent\n(operationId:payment)
 Payment --> Saga: paymentId, paymentUrl
@@ -63,10 +70,15 @@ Projection --> BFF: PENDING_PAYMENT, paymentUrl
 BFF --> Mobile: PENDING_PAYMENT, paymentUrl
 
 Mobile -> Payment: подтвердить оплату
-Payment -> Saga: подписанный webhook CAPTURED\n(inbox + дедупликация)
+Payment -> PaymentInbox: подписанный webhook CAPTURED
+PaymentInbox -> PaymentInbox: проверить подпись и\nдедуплицировать eventId
+PaymentInbox -> Saga: PaymentCaptured(operationId, paymentId)
 
 Saga -> LIS: reserveLabSlot(operationId:lab)
 LIS --> Saga: labReservationId
+
+Saga -> Schedule: confirmAppointment\n(appointmentReservationId,\noperationId:appointment-confirm)
+Schedule --> Saga: appointment CONFIRMED
 
 Saga -> Bus: BookingSagaCompleted(operationId)
 deactivate Saga

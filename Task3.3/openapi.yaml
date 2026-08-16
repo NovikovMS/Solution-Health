@@ -15,20 +15,31 @@ paths:
     get:
       tags:
         - Appointments
-      summary: Получить предстоящие записи к врачу
+      summary: Получить записи к врачу
       description: >-
         Возвращает записи только текущего пациента, определённого по access token.
-        Результат отсортирован по startsAt по возрастанию, затем по id.
+        Фильтр status задаёт вычисляемую временную категорию списка, а не напрямую
+        значение Appointment.status. Момент now фиксируется один раз в начале
+        обработки запроса. Результат имеет стабильную сортировку по startsAt по
+        возрастанию, затем по уникальному id по возрастанию; limit и offset
+        применяются после фильтрации и сортировки.
       operationId: listPatientAppointments
       parameters:
         - name: status
           in: query
-          description: Фильтр по состоянию записи.
+          description: >-
+            Вычисляемая категория списка. upcoming — startsAt >= now и
+            Appointment.status не равен cancelled; past — startsAt < now и
+            Appointment.status не равен cancelled; cancelled —
+            Appointment.status равен cancelled независимо от startsAt.
+            Значение now фиксируется сервером в начале обработки запроса.
           required: false
           schema:
             type: string
             enum:
               - upcoming
+              - past
+              - cancelled
             default: upcoming
           example: upcoming
         - name: limit
@@ -44,17 +55,22 @@ paths:
           example: 20
         - name: offset
           in: query
-          description: Число записей, пропускаемых от начала отсортированного списка.
+          description: >-
+            Число записей, пропускаемых от начала отфильтрованного и стабильно
+            отсортированного списка. Допустимы значения от 0 до 10000 включительно;
+            для более глубокого просмотра клиенту потребуется будущая
+            cursor-пагинация.
           required: false
           schema:
             type: integer
             format: int32
             minimum: 0
+            maximum: 10000
             default: 0
           example: 0
       responses:
         "200":
-          description: Список предстоящих записей получен.
+          description: Список записей, соответствующих выбранной категории, получен.
           content:
             application/json:
               schema:
@@ -171,11 +187,17 @@ components:
           example: apt_01JX6E4S2K8N2P4M5Q7R9T1V3W
         status:
           type: string
-          description: Текущее состояние записи.
+          description: >-
+            Текущее состояние жизненного цикла записи. Это поле не равно
+            одноимённому query-параметру: upcoming и past вычисляются по startsAt
+            и признаку cancelled, а cancelled соответствует значению cancelled
+            этого поля.
           enum:
             - pending_payment
             - confirmed
             - rescheduling
+            - completed
+            - cancelled
           example: confirmed
         startsAt:
           type: string
@@ -247,6 +269,7 @@ components:
           type: integer
           format: int32
           minimum: 0
+          maximum: 10000
           example: 0
         count:
           type: integer

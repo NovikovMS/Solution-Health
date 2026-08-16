@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
-  <diagram id="target-c4-context" name="C4 Level 1 — TO-BE">
-    <mxGraphModel dx="3056" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1950" pageHeight="1200" math="0" shadow="0">
+  <diagram id="target-c4-context-v2" name="C4 Level 1 — TO-BE v2">
+    <mxGraphModel dx="3251" dy="896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1950" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -16,12 +16,13 @@
         <mxCell id="e-platform-events" value="REL05 Команды [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="patient-platform" target="event-platform" edge="1">
           <mxGeometry y="-18" relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-events-platform" value="REL06 Статусы [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="event-platform" target="patient-platform" edge="1">
-          <mxGeometry y="18" relative="1" as="geometry">
+        <mxCell id="e-events-platform" value="REL06 Статусы и проекции, включая ДМС [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="event-platform" target="patient-platform" edge="1">
+          <mxGeometry x="0.1628" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="848" y="860" />
               <mxPoint x="848" y="590" />
             </Array>
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="notifications" value="&lt;b&gt;Уведомления&lt;/b&gt;&lt;br&gt;Email, SMS и push" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
@@ -38,7 +39,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-integration-events" value="REL08 События [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="integration-platform" target="event-platform" edge="1">
+        <mxCell id="e-integration-events" value="REL08 Результаты legacy и ДМС [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="integration-platform" target="event-platform" edge="1">
           <mxGeometry x="0.6775" y="-20" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1508" y="1010" />
@@ -49,7 +50,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="lis" value="&lt;b&gt;LIS&lt;/b&gt;&lt;br&gt;Лабораторные результаты и резервирование" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+        <mxCell id="lis" value="&lt;b&gt;LIS&lt;/b&gt;&lt;br&gt;Результаты и резервирование&lt;br&gt;Прямой LIS→CRM выводится после сверки" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
           <mxGeometry x="1428" y="620" width="200" height="100" as="geometry" />
         </mxCell>
         <mxCell id="e-lis-integration" value="REL13 REST + Inbox&lt;br&gt;Результаты" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="lis" target="integration-platform" edge="1">
@@ -63,9 +64,9 @@
         <mxCell id="e-integration-lis" value="REL14 REST [sync]&lt;br&gt;Резервирование" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="integration-platform" target="lis" edge="1">
           <mxGeometry x="0.7285" y="-20" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1538" y="990" />
-              <mxPoint x="1678" y="990" />
-              <mxPoint x="1678" y="580" />
+              <mxPoint x="1540" y="990" />
+              <mxPoint x="1680" y="990" />
+              <mxPoint x="1680" y="580" />
               <mxPoint x="1528" y="580" />
             </Array>
             <mxPoint as="offset" />
@@ -82,12 +83,12 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-integration-schedule" value="REL09 REST [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="integration-platform" target="schedule" edge="1">
+        <mxCell id="e-integration-schedule" value="REL09 REST [sync]&lt;br&gt;Idempotency-Key" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="integration-platform" target="schedule" edge="1">
           <mxGeometry x="0.9355" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1538" y="990" />
-              <mxPoint x="1678" y="990" />
-              <mxPoint x="1678" y="290" />
+              <mxPoint x="1540" y="990" />
+              <mxPoint x="1680" y="990" />
+              <mxPoint x="1680" y="290" />
               <mxPoint x="1298" y="290" />
             </Array>
             <mxPoint as="offset" />
@@ -149,6 +150,39 @@
         <mxCell id="e-web-internal-gateway" value="REL20 Staff API [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="health-boundary" source="web-portal" target="internal-gateway" edge="1">
           <mxGeometry y="-18" relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="gateway" value="&lt;b&gt;External API Gateway / WAF&lt;/b&gt;&lt;br&gt;Публичный вход мобильного приложения и политики API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="578" y="495" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="crm" value="&lt;b&gt;CRM&lt;/b&gt;&lt;br&gt;Карточки пациентов и результаты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="1438" y="365" width="200" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="policies" value="&lt;b&gt;1С: Полисы&lt;/b&gt;&lt;br&gt;Источник ДМС; проверка и прикрепление" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="1718" y="362.5" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e-integration-crm" value="REL11 REST [sync]&lt;br&gt;Целевой путь результатов LIS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="integration-platform" target="crm" edge="1">
+          <mxGeometry x="0.9375" y="20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1540" y="990" />
+              <mxPoint x="1680" y="990" />
+              <mxPoint x="1680" y="290" />
+              <mxPoint x="1550" y="290" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-integration-policies" value="REL12 Проверка HTTP [sync]&lt;br&gt;Проекция ДМС через Events [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="integration-platform" target="policies" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-internal-gateway-crm" value="REL24 REST [sync]&lt;br&gt;Карточки пациентов" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="health-boundary" source="internal-gateway" target="crm" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1470" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="observability" value="&lt;b&gt;Платформа наблюдаемости&lt;/b&gt;&lt;br&gt;Метрики, логи, трассировки и алерты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="health-boundary" vertex="1">
+          <mxGeometry x="587" y="1225" width="240" height="105" as="geometry" />
+        </mxCell>
         <mxCell id="patient" value="&lt;b&gt;Пациент&lt;/b&gt;&lt;br&gt;Запись, оплата, анализы, ДМС" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="-80" y="584.5" width="190" height="90" as="geometry" />
         </mxCell>
@@ -157,15 +191,6 @@
         </mxCell>
         <mxCell id="lab-technician" value="&lt;b&gt;Лаборант&lt;/b&gt;&lt;br&gt;Контроль результатов в LIS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427b;strokeColor=#052e56;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="-80" y="310" width="190" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="gateway" value="&lt;b&gt;External API Gateway / WAF&lt;/b&gt;&lt;br&gt;Публичный вход мобильного приложения и политики API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="818" y="575" width="230" height="105" as="geometry" />
-        </mxCell>
-        <mxCell id="crm" value="&lt;b&gt;CRM&lt;/b&gt;&lt;br&gt;Карточки пациентов и результаты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="1678" y="445" width="200" height="95" as="geometry" />
-        </mxCell>
-        <mxCell id="policies" value="&lt;b&gt;1С: Полисы&lt;/b&gt;&lt;br&gt;Проверка и прикрепление ДМС" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="1958" y="442.5" width="200" height="100" as="geometry" />
         </mxCell>
         <mxCell id="payment" value="&lt;b&gt;Платёжный шлюз&lt;/b&gt;&lt;br&gt;Проведение платежей и callbacks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748b;strokeColor=#334155;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;dashed=1;" parent="1" vertex="1">
           <mxGeometry x="2298" y="1010" width="220" height="105" as="geometry" />
@@ -204,7 +229,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-gateway-iam" value="REL03 JWT [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="gateway" target="iam" edge="1">
+        <mxCell id="e-gateway-iam" value="REL03 JWT локально&lt;br&gt;JWKS refresh [periodic/cache]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="gateway" target="iam" edge="1">
           <mxGeometry x="-0.2934" y="-10" relative="1" as="geometry">
             <mxPoint as="offset" />
             <Array as="points">
@@ -216,30 +241,10 @@
         <mxCell id="e-gateway-platform" value="REL04 REST [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="gateway" target="patient-platform" edge="1">
           <mxGeometry y="-20" relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-integration-crm" value="REL11 REST [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="integration-platform" target="crm" edge="1">
-          <mxGeometry x="0.9194" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1778" y="1070" />
-              <mxPoint x="1918" y="1070" />
-              <mxPoint x="1918" y="370" />
-              <mxPoint x="1828" y="370" />
-            </Array>
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e-integration-policies" value="REL12 HTTP [sync]&lt;br&gt;Проверка / синхронизация" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="integration-platform" target="policies" edge="1">
-          <mxGeometry x="0.5304" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1778" y="1070" />
-              <mxPoint x="2058" y="1070" />
-            </Array>
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="e-integration-payment" value="REL15 Платёж [REST, sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="integration-platform" target="payment" edge="1">
           <mxGeometry x="0.3614" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1778" y="1070" />
+              <mxPoint x="1780" y="1070" />
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
@@ -263,10 +268,11 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-providers-patient" value="Push / SMS / email" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="observability" target="patient" edge="1">
+        <mxCell id="e-providers-patient" value="Push / SMS / email" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="message-providers" target="patient" edge="1">
           <mxGeometry x="0.8221" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="170" y="1358" />
+              <mxPoint x="2408" y="1430" />
+              <mxPoint x="170" y="1430" />
               <mxPoint x="170" y="500" />
               <mxPoint x="50" y="500" />
             </Array>
@@ -307,18 +313,6 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="8VxPfA1XYqpvdzYbjMXH-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#64748b;dashed=1;dashPattern=8 4;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" parent="1" source="message-providers" target="observability" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="2408" y="1350" />
-              <mxPoint x="1130" y="1350" />
-              <mxPoint x="1130" y="1270" />
-              <mxPoint x="947" y="1270" />
-            </Array>
-            <mxPoint x="2408" y="1308" as="sourcePoint" />
-            <mxPoint x="110" y="500" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="e-lab-internal-gateway" value="REL21 LIS access [sync]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="lab-technician" target="internal-gateway" edge="1">
           <mxGeometry x="0.3933" y="20" relative="1" as="geometry">
             <Array as="points">
@@ -326,14 +320,6 @@
               <mxPoint x="810" y="230" />
             </Array>
             <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e-internal-gateway-crm" value="REL24 REST [sync]&lt;br&gt;Карточки пациентов" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#0f766e;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="internal-gateway" target="crm" edge="1">
-          <mxGeometry x="0.35" y="18" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1320" y="330" />
-              <mxPoint x="1778" y="330" />
-            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="e-internal-gateway-observability" value="REL19 Аудит и телеметрия [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#94a3b8;dashed=1;dashPattern=4 4;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="internal-gateway" target="observability" edge="1">
@@ -356,8 +342,11 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="observability" value="&lt;b&gt;Платформа наблюдаемости&lt;/b&gt;&lt;br&gt;Метрики, логи, трассировки и алерты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="827" y="1305" width="240" height="105" as="geometry" />
+        <mxCell id="e-iam-observability" value="REL19 CIAM аудит [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#94a3b8;dashed=1;dashPattern=4 4;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="iam" target="observability" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-notifications-observability" value="REL19 Доставка уведомлений [async]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=1;strokeColor=#94a3b8;dashed=1;dashPattern=4 4;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;jumpStyle=arc;" parent="1" source="notifications" target="observability" edge="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

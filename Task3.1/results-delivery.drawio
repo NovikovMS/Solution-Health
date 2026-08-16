@@ -10,13 +10,13 @@
         <mxCell id="3" value="&lt;b&gt;LIS&lt;/b&gt;&lt;br&gt;Результат подтверждён&lt;br&gt;resultId создан" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168bd;strokeColor=#0b4884;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-143" y="170" width="180" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="4" value="&lt;b&gt;LIS-адаптер&lt;/b&gt;&lt;br&gt;REST/HTTPS&lt;br&gt;нормализация" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="4" value="&lt;b&gt;Единый LIS-адаптер&lt;/b&gt;&lt;br&gt;REST JSON / FTP XML&lt;br&gt;нормализация" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="175" y="170" width="180" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="5" value="&lt;b&gt;Persistent Inbox&lt;/b&gt;&lt;br&gt;атомарное сохранение&lt;br&gt;до ответа 202" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="5" value="&lt;b&gt;Persistent Inbox&lt;/b&gt;&lt;br&gt;UNIQUE(resultId)&lt;br&gt;atomic INSERT ON CONFLICT&lt;br&gt;commit до ответа 202" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" parent="1" vertex="1">
           <mxGeometry x="448" y="160" width="180" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="6" value="resultId уже&lt;br&gt;обработан?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;fontSize=13;" parent="1" vertex="1">
+        <mxCell id="6" value="Результат atomic INSERT" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;fontSize=13;" parent="1" vertex="1">
           <mxGeometry x="770" y="155" width="150" height="130" as="geometry" />
         </mxCell>
         <mxCell id="7" value="&lt;b&gt;Обработчик inbox&lt;/b&gt;&lt;br&gt;валидация, привязка&lt;br&gt;к пациенту" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
@@ -46,10 +46,10 @@
         <mxCell id="15" value="Push: «Результат готов»" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" parent="1" vertex="1">
           <mxGeometry x="-143" y="710" width="190" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="16" value="&lt;b&gt;DLQ&lt;/b&gt;&lt;br&gt;алерт, исправление,&lt;br&gt;контролируемый replay" style="shape=mxgraph.basic.queue;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="16" value="&lt;b&gt;Consumer DLQ&lt;/b&gt;&lt;br&gt;алерт, исправление,&lt;br&gt;идемпотентный replay" style="shape=mxgraph.basic.queue;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="1660" y="630" width="185" height="95" as="geometry" />
         </mxCell>
-        <mxCell id="17" value="Вернуть прежний 202&lt;br&gt;без создания дубля" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" parent="1" vertex="1">
+        <mxCell id="17" value="CONFLICT: вернуть тот же 202&lt;br&gt;без новой inbox-записи" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" parent="1" vertex="1">
           <mxGeometry x="770" y="44" width="150" height="60" as="geometry" />
         </mxCell>
         <mxCell id="18" value="POST resultId&lt;br&gt;повтор с тем же ID" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="3" target="4" edge="1">
@@ -57,22 +57,22 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="19" value="сохранить" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="4" target="5" edge="1">
+        <mxCell id="19" value="одна DB-транзакция" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="4" target="5" edge="1">
           <mxGeometry x="-0.0323" y="20" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="20" value="202 после commit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="5" target="6" edge="1">
+        <mxCell id="20" value="commit: inserted / conflict" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="5" target="6" edge="1">
           <mxGeometry x="0.0141" y="20" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="21" value="нет" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="6" target="7" edge="1">
+        <mxCell id="21" value="INSERTED → 202 + обработка" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="6" target="7" edge="1">
           <mxGeometry y="20" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="22" value="да" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="6" target="17" edge="1">
+        <mxCell id="22" value="CONFLICT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="6" target="17" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="23" value="локальная транзакция" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="7" target="8" edge="1">
@@ -80,7 +80,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="24" value="publisher confirms" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="8" target="9" edge="1">
+        <mxCell id="24" value="pending outbox" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="8" target="35" edge="1">
           <mxGeometry x="0.0274" y="20" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -88,7 +88,7 @@
         <mxCell id="25" value="at-least-once" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="9" target="10" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="26" value="commit → ack" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="10" edge="1">
+        <mxCell id="26" value="commit → ack" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="10" target="11" edge="1">
           <mxGeometry x="0.3034" y="-10" relative="1" as="geometry">
             <mxPoint x="1521" y="440" as="targetPoint" />
             <mxPoint as="offset" />
@@ -135,14 +135,81 @@
           <mxGeometry x="-0.6433" y="10" relative="1" as="geometry">
             <mxPoint x="1521" y="637.5" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="1753" y="760" />
-              <mxPoint x="1600" y="760" />
-              <mxPoint x="1600" y="240" />
+              <mxPoint x="1880" y="760" />
+              <mxPoint x="1880" y="240" />
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="33" value="Сплошная линия — данные/команда; &lt;br&gt;пунктир — событие, уведомление или восстановление. &lt;br&gt;&lt;br&gt;Все этапы передают correlationId." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#94a3b8;fontSize=12;align=left;spacingLeft=12;" parent="1" vertex="1">
+        <mxCell id="34" value="&lt;b&gt;Legacy FTP/XML&lt;/b&gt;&lt;br&gt;poller; файл архивируется&lt;br&gt;только после commit inbox" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=12;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="-143" y="40" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="&lt;b&gt;Outbox relay&lt;/b&gt;&lt;br&gt;lease + publish&lt;br&gt;confirm → publishedAt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f8a8a;strokeColor=#075f5f;fontColor=#ffffff;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1530" y="170" width="115" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="&lt;b&gt;Inbox retry state&lt;/b&gt;&lt;br&gt;attempts + nextAttemptAt&lt;br&gt;backoff + jitter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="990" y="315" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="&lt;b&gt;Inbox DLQ&lt;/b&gt;&lt;br&gt;dead + alert&lt;br&gt;controlled replay" style="shape=mxgraph.basic.queue;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="990" y="640" width="170" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="&lt;b&gt;Outbox retry state&lt;/b&gt;&lt;br&gt;нет confirm → pending&lt;br&gt;backoff + jitter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1530" y="315" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="&lt;b&gt;Outbox DLQ&lt;/b&gt;&lt;br&gt;source retained + alert&lt;br&gt;controlled replay" style="shape=mxgraph.basic.queue;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1530" y="520" width="140" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="40" value="legacy import" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#666666;dashed=1;endArrow=block;endFill=1;fontSize=11;" parent="1" source="34" target="4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="41" value="publisher confirm" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" parent="1" source="35" target="9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="42" value="временная ошибка" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#d6b656;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="7" target="36" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="43" value="nextAttemptAt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#d6b656;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="36" target="7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960" y="355" />
+              <mxPoint x="960" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="44" value="лимит attempts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#b85450;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="36" target="37" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="45" value="replay → pending" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#b85450;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="37" target="36" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960" y="682" />
+              <mxPoint x="960" y="355" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="46" value="нет confirm" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#d6b656;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="35" target="38" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="47" value="nextAttemptAt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#d6b656;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="38" target="35" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1510" y="355" />
+              <mxPoint x="1510" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="48" value="лимит attempts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#b85450;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="38" target="39" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="49" value="replay → pending" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#b85450;dashed=1;endArrow=block;endFill=1;fontSize=10;" parent="1" source="39" target="38" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1500" y="562" />
+              <mxPoint x="1500" y="355" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="33" value="Сплошная линия — данные/команда; пунктир — legacy-вход, retry, событие или replay.&lt;br&gt;Inbox handler, outbox relay и consumers имеют независимые retry/DLQ. Все этапы передают correlationId." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#94a3b8;fontSize=12;align=left;spacingLeft=12;" parent="1" vertex="1">
           <mxGeometry x="50" y="820" width="1610" height="60" as="geometry" />
         </mxCell>
       </root>
